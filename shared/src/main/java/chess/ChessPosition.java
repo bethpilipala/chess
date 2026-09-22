@@ -38,6 +38,11 @@ public class ChessPosition {
     }
 
     @Override
+    public int hashCode() {
+        return java.util.Objects.hash(row, column);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;

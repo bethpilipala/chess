@@ -75,4 +75,9 @@ public class ChessPiece {
 
         return validMoves.pieceMoves(board, myPosition);
     }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(pieceColor, pieceType);
+    }
 }

@@ -51,6 +51,11 @@ public class ChessMove {
     }
 
     @Override
+    public int hashCode() {
+        return java.util.Objects.hash(startPosition, endPosition, promotionPiece);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) //if they are the same thing (memory?), they are equal
             return true;
