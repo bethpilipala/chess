@@ -19,13 +19,17 @@ public abstract class MoveRules {
         ChessPiece startPiece = board.getPiece(start);
         ChessPiece endPiece = board.getPiece(end);
 
-        if(endPiece == null) //Not occupued
+        if(endPiece == null) //Not occupied
             return false;
 
         if(startPiece.getTeamColor() != endPiece.getTeamColor()) //opposite color
             return true;
         else
             return false;
+    }
+
+    protected void addSlidingMoves(ChessBoard board, ChessPosition start, int rowChange, int colChange, Collection<ChessMove> moves){
+        ChessPiece startPiece = board.getPiece(start);
     }
 
 }
