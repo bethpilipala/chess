@@ -55,7 +55,13 @@ public class PawnMoveRules extends MoveRules {
     private void addPawnMove(Collection<ChessMove> moves, ChessPosition start, ChessPosition end, int promotionRow){
         //This primarily checks if it is a promotion piece and then adds the move
 
-        moves.add(new ChessMove(start, end,null));
-
+        if(end.getRow() == promotionRow){
+            moves.add(new ChessMove(start, end, ChessPiece.PieceType.QUEEN));
+            moves.add(new ChessMove(start, end, ChessPiece.PieceType.KNIGHT));
+            moves.add(new ChessMove(start, end, ChessPiece.PieceType.BISHOP));
+            moves.add(new ChessMove(start, end, ChessPiece.PieceType.ROOK));
+        }
+        else
+            moves.add(new ChessMove(start, end,null));
     }
 }
