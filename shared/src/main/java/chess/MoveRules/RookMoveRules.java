@@ -11,7 +11,14 @@ public class RookMoveRules extends MoveRules {
 
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition position) {
-        return new ArrayList<>();
+        Collection<ChessMove> moves = new ArrayList<>();
+
+        addSlidingMoves(board, position, 1, 0, moves); //Up
+        addSlidingMoves(board, position, 0, 1, moves); //Right
+        addSlidingMoves(board, position, -1, 0, moves); //Down
+        addSlidingMoves(board, position, 0, -1, moves); //Left
+
+        return moves;
     }
 
 }
