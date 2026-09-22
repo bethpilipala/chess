@@ -50,7 +50,27 @@ public abstract class MoveRules {
             row += rowChange;
             col += colChange;
         }
+    }
 
+    protected void addSingleMoves(ChessBoard board, ChessPosition start, int rowChange, int colChange, Collection<ChessMove> moves){
+        //This will check if a single move is valid
+        //Will be used for Pawns, Knights, and Kings
+
+        int row = start.getRow() + rowChange;
+        int col = start.getColumn() + colChange;
+
+        if(!inBounds(row, col))
+            return;
+
+        ChessPosition end = new ChessPosition(row, col);
+        ChessPiece endPiece = board.getPiece(end);
+
+        if(endPiece == null)
+            moves.add(new ChessMove(start, end, null));
+        else {
+            if (isEnemy(board, start, end))
+                moves.add(new ChessMove(start, end, null));
+        }
 
     }
 
