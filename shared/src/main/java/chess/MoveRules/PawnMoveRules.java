@@ -17,7 +17,7 @@ public class PawnMoveRules extends MoveRules {
         int startingRow;
         int promotionRow;
 
-        //Set based on color
+        //Set values based on color
         if(pawn.getTeamColor() == ChessGame.TeamColor.WHITE) {
             direction = 1;
             startingRow = 2;
@@ -32,6 +32,7 @@ public class PawnMoveRules extends MoveRules {
         int row = position.getRow();
         int col = position.getColumn();
 
+        //Forward stepping logic
         int firstStepRow = row + direction;
         if(inBounds(firstStepRow, col)){
             ChessPosition firstStep = new ChessPosition(firstStepRow, col);
@@ -47,6 +48,23 @@ public class PawnMoveRules extends MoveRules {
                         addPawnMove(moves, position, secondStep, promotionRow);
                 }
             }
+        }
+
+        //Capturing logic
+        int captureRow = row + direction;
+
+        if(inBounds(captureRow, col - 1)){ //Left capturing
+            ChessPosition leftPosition = new ChessPosition(captureRow, col-1);
+
+            if(isEnemy(board, position, leftPosition))
+                addPawnMove(moves,position, leftPosition, promotionRow);
+        }
+
+        if(inBounds(captureRow, col + 1)) { //Right capturing
+            ChessPosition rightPosition = new ChessPosition(captureRow, col + 1);
+
+            if(isEnemy(board, position, rightPosition))
+                addPawnMove(moves, position, rightPosition, promotionRow);
         }
 
         return moves;
