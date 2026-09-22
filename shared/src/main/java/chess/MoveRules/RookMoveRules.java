@@ -1,4 +1,17 @@
 package chess.MoveRules;
 
-public class RookMoveRules {
+import chess.ChessBoard;
+import chess.ChessMove;
+import chess.ChessPosition;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class RookMoveRules extends MoveRules {
+
+    @Override
+    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition position) {
+        return new ArrayList<>();
+    }
+
 }

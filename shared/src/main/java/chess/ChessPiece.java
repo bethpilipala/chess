@@ -1,5 +1,7 @@
 package chess;
 
+import chess.MoveRules.*;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -56,9 +58,21 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ChessPiece piece = board.getPiece(myPosition);
 
-        if (piece.getPieceType() == PieceType.BISHOP)
-            return List.of(new ChessMove(new ChessPosition(5,4), new ChessPosition(1, 8), null));
+        if (piece == null)
+            return new ArrayList<>();
 
-        return new ArrayList<>();
+        MoveRules validMoves;
+
+        switch (piece.getPieceType()) {
+            case BISHOP ->  validMoves = new BishopMoveRules();
+            case ROOK -> validMoves =  new RookMoveRules();
+            case QUEEN ->  validMoves = new QueenMoveRules();
+            case KNIGHT -> validMoves = new KnightMoveRules();
+            case KING -> validMoves =  new KingMoveRules();
+            case PAWN -> validMoves = new PawnMoveRules();
+            default -> throw new IllegalArgumentException("Unknown piece type");
+        }
+
+        return validMoves.pieceMoves(board, myPosition);
     }
 }
