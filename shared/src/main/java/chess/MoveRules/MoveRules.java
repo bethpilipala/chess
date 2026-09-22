@@ -15,4 +15,17 @@ public abstract class MoveRules {
             return false;
     }
 
+    protected boolean isEnemy(ChessBoard board, ChessPosition start, ChessPosition end){
+        ChessPiece startPiece = board.getPiece(start);
+        ChessPiece endPiece = board.getPiece(end);
+
+        if(endPiece == null) //Not occupued
+            return false;
+
+        if(startPiece.getTeamColor() != endPiece.getTeamColor()) //opposite color
+            return true;
+        else
+            return false;
+    }
+
 }
