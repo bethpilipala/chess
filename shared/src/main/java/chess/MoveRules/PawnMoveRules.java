@@ -32,11 +32,30 @@ public class PawnMoveRules extends MoveRules {
         int row = position.getRow();
         int col = position.getColumn();
 
-        //Add simple forward moves
-        addSingleMoves(board, position, direction, 0, moves);
-        if(row == startingRow)
-            addSingleMoves(board, position, (direction*2), 0, moves);
+        int firstStepRow = row + direction;
+        if(inBounds(firstStepRow, col)){
+            ChessPosition firstStep = new ChessPosition(firstStepRow, col);
+
+            if(board.getPiece(firstStep) == null) {//empty space
+                addPawnMove(moves, position, firstStep, promotionRow);
+
+                int secondStepRow = row + (direction * 2); //only valid if first step is also valid
+                if(row == startingRow && inBounds(secondStepRow, col)){
+                    ChessPosition secondStep = new ChessPosition(secondStepRow, col);
+
+                    if(board.getPiece(secondStep) == null) //empty space
+                        addPawnMove(moves, position, secondStep, promotionRow);
+                }
+            }
+        }
 
         return moves;
+    }
+
+    private void addPawnMove(Collection<ChessMove> moves, ChessPosition start, ChessPosition end, int promotionRow){
+        //This primarily checks if it is a promotion piece and then adds the move
+
+        moves.add(new ChessMove(start, end,null));
+
     }
 }
