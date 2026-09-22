@@ -54,7 +54,7 @@ public abstract class MoveRules {
 
     protected void addSingleMoves(ChessBoard board, ChessPosition start, int rowChange, int colChange, Collection<ChessMove> moves){
         //This will check if a single move is valid
-        //Will be used for Pawns, Knights, and Kings
+        //Will be used for Knights, and Kings
 
         int row = start.getRow() + rowChange;
         int col = start.getColumn() + colChange;
