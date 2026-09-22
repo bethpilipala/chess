@@ -80,4 +80,18 @@ public class ChessPiece {
     public int hashCode() {
         return java.util.Objects.hash(pieceColor, pieceType);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (!(obj instanceof ChessPiece other)) {
+            return false;
+        }
+
+        return pieceColor == other.pieceColor
+                && pieceType == other.pieceType;
+    }
 }
