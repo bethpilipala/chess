@@ -32,8 +32,6 @@ public abstract class MoveRules {
         //This will check valid moves for both lateral and horizontal movements!
         //Will be used for Rooks, Bishops, and Queens
 
-        ChessPiece startPiece = board.getPiece(start);
-
         int row = start.getRow() + rowChange;
         int col = start.getColumn() + colChange;
 
@@ -43,8 +41,10 @@ public abstract class MoveRules {
 
             if(endPiece == null) //If space is not occupied
                 moves.add(new ChessMove(start, end, null)); //TODO: might need more promotion piece logic here?
-            else {
-                break; //TODO: Implement fucntionality if there is a piece here.
+            else { //If it IS occupied
+                if(isEnemy(board, start, end))
+                    moves.add(new ChessMove(start, end, null));
+                break; //Can't move any further past a piece
             }
 
             row += rowChange;
