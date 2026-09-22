@@ -11,7 +11,18 @@ public class KnightMoveRules extends MoveRules {
 
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition position) {
-        return new ArrayList<>();
+        Collection<ChessMove> moves = new ArrayList<>();
+
+        addSingleMoves(board, position, 2, 1, moves);
+        addSingleMoves(board, position, 2, -1, moves);
+        addSingleMoves(board, position, -2, 1, moves);
+        addSingleMoves(board, position, -2, -1, moves);
+        addSingleMoves(board, position, 1, 2, moves);
+        addSingleMoves(board, position, 1, -2, moves);
+        addSingleMoves(board, position, -1, 2, moves);
+        addSingleMoves(board, position, -1, -2, moves);
+
+        return moves;
     }
 
 }
