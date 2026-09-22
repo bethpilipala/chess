@@ -36,4 +36,21 @@ public class ChessPosition {
     public String toString() {
         return String.format("[%d, %d]", row, column);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+
+        if (!(obj instanceof ChessPosition))
+            return false;
+
+        ChessPosition other = (ChessPosition) obj;
+
+        // They are equal if they have the same row and column.
+        if (row == other.row && column == other.column)
+            return true;
+
+        return false;
+    }
 }
