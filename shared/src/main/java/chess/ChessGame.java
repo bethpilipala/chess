@@ -15,6 +15,7 @@ public class ChessGame {
 
     public ChessGame() {
         board = new ChessBoard();
+        board.resetBoard(); //put all the pieces on the board! (empty otherwise)
         teamTurn = TeamColor.WHITE; //Chess always starts with white
 
     }
