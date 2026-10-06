@@ -22,16 +22,15 @@ public class ChessGame {
     }
 
     public static void main(String[] args) { //Included for testing purposes and will be deleted!
-        ChessBoard original = new ChessBoard();
-        original.resetBoard();
+        ChessBoard board = new ChessBoard();
+        board.resetBoard();
+        ChessGame game = new ChessGame();
 
-        ChessBoard copy = original.makeTestingBoard();
-        System.out.println(copy.equals(original));  //should print true
+        ChessPosition whiteKing = game.findKing(board, TeamColor.WHITE);
+        ChessPosition blackKing = game.findKing(board, TeamColor.BLACK);
 
-        //Remove a piece from the copy
-        copy.addPiece(new ChessPosition(2, 1), null);
-        System.out.println(copy.equals(original));  //should print false
-        System.out.println(original.getPiece(new ChessPosition(2, 1)) != null);  //should print true
+        System.out.println("white king: " + whiteKing);
+        System.out.println("black king: " + blackKing);
     }
 
     /**
@@ -129,10 +128,18 @@ public class ChessGame {
         return board;
     }
 
-    public ChessPosition findKing(){
-        //not implemented!
-        //this will be to find where the king is at so that i can check for checkmate
-        throw new RuntimeException("Not implemented");
+    public ChessPosition findKing(ChessBoard board, TeamColor color){
+        //Find where the king is at on the board for a particular team
+        for (int row = 1; row <= 8; row++) {
+            for (int col = 1; col <= 8; col++) {
+                ChessPosition position = new ChessPosition(row, col);
+                ChessPiece piece = board.getPiece(position);
+
+                if (piece != null && piece.getTeamColor() == color && piece.getPieceType() == ChessPiece.PieceType.KING)
+                    return position;
+            }
+        }
+        return null;//if king not found (shouldn't happen)
     }
 
     public void makeTestMove(){
