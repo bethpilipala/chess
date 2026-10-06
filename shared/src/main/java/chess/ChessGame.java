@@ -21,6 +21,19 @@ public class ChessGame {
 
     }
 
+    public static void main(String[] args) { //Included for testing purposes and will be deleted!
+        ChessBoard original = new ChessBoard();
+        original.resetBoard();
+
+        ChessBoard copy = original.makeTestingBoard();
+        System.out.println(copy.equals(original));  //should print true
+
+        //Remove a piece from the copy
+        copy.addPiece(new ChessPosition(2, 1), null);
+        System.out.println(copy.equals(original));  //should print false
+        System.out.println(original.getPiece(new ChessPosition(2, 1)) != null);  //should print true
+    }
+
     /**
      * @return Which team's turn it is
      */
@@ -114,6 +127,17 @@ public class ChessGame {
     public ChessBoard getBoard() {
 
         return board;
+    }
+
+    public ChessPosition findKing(){
+        //not implemented!
+        //this will be to find where the king is at so that i can check for checkmate
+        throw new RuntimeException("Not implemented");
+    }
+
+    public void makeTestMove(){
+        //move a piece on the test baord
+        throw new RuntimeException("Not implemented");
     }
 
     @Override

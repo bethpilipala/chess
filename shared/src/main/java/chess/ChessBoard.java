@@ -68,6 +68,20 @@ public class ChessBoard {
             addPiece( new ChessPosition(row, col), new ChessPiece(color, ChessPiece.PieceType.PAWN));
     }
 
+    public ChessBoard makeTestingBoard(){
+        //Create a copy of the board to try moves on without changing the actual board
+
+        ChessBoard boardCopy = new ChessBoard();
+        for (int row = 1; row <= 8; row++) {
+            for (int col = 1; col <= 8; col++) {
+                ChessPosition pos = new ChessPosition(row, col);
+                ChessPiece piece = this.getPiece(pos);
+                boardCopy.addPiece(pos, piece);  //share the same piece reference
+            }
+        }
+        return boardCopy;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
