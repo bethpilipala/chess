@@ -23,14 +23,23 @@ public class ChessGame {
 
     public static void main(String[] args) { //Included for testing purposes and will be deleted!
         ChessBoard testBoard = new ChessBoard();
-        testBoard.resetBoard();
 
-        //move the white pawn from (2, 5) to (4, 5)
-        ChessMove move = new ChessMove(new ChessPosition(2, 5), new ChessPosition(4, 5), null);
-        makeTestMove(testBoard, move);
+        // White king at (1,5)
+        testBoard.addPiece(
+                new ChessPosition(1, 5),
+                new ChessPiece(TeamColor.WHITE, ChessPiece.PieceType.KING)
+        );
 
-        System.out.println(testBoard.getPiece(new ChessPosition(2, 5)) == null);  //should print tru
-        System.out.println(testBoard.getPiece(new ChessPosition(4, 5)) == null);  //should print false
+        // Black rook at (1,1)
+        testBoard.addPiece(
+                new ChessPosition(1, 1),
+                new ChessPiece(TeamColor.BLACK, ChessPiece.PieceType.ROOK)
+        );
+
+        ChessGame game = new ChessGame();
+
+        System.out.println(game.isInCheck(testBoard, TeamColor.WHITE));
+        System.out.println(game.isInCheck(testBoard, TeamColor.BLACK));
     }
 
     /**
@@ -85,7 +94,7 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        return isInCheck(board, teamColor);
     }
 
     /**
@@ -143,7 +152,7 @@ public class ChessGame {
     }
 
     private static void makeTestMove(ChessBoard board, ChessMove move){
-        //move a piece on the test board (does not validiate the move)
+        //Move a piece on the test board (does not validate the move)
 
         ChessPiece piece = board.getPiece(move.getStartPosition()); //get the piece at the start
         board.addPiece(move.getStartPosition(), null); //clear the start square
@@ -153,6 +162,31 @@ public class ChessGame {
             piece = new ChessPiece(piece.getTeamColor(), move.getPromotionPiece());
 
         board.addPiece(move.getEndPosition(), piece);
+    }
+
+    private boolean isInCheck(ChessBoard board, TeamColor color){
+        //using method overloading principle so I can check on my copy of the board as well
+        ChessPosition kingPos = findKing(board, color);
+        if (kingPos == null)
+            return false; //shouldnt exist but checking anyways
+
+        //parse over the board and check if an enemy can get the king
+        for (int row = 1; row <= 8; row++) {
+            for (int col = 1; col <= 8; col++) {
+                ChessPosition position = new ChessPosition(row, col);
+                ChessPiece piece = board.getPiece(position);
+
+                if (piece != null && piece.getTeamColor() != color)
+                {
+                    for (ChessMove move : piece.pieceMoves(board, position)) {
+                        if (move.getEndPosition().equals(kingPos))
+                            return true;
+                    }
+
+                }
+            }
+        }
+        return false;
     }
 
     @Override
