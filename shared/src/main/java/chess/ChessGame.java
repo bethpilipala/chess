@@ -19,28 +19,6 @@ public class ChessGame {
         board = new ChessBoard();
         board.resetBoard(); //put all the pieces on the board! (empty otherwise)
         teamTurn = TeamColor.WHITE; //Chess always starts with white
-
-    }
-
-    public static void main(String[] args) { //Included for testing purposes and will be deleted!
-        ChessBoard testBoard = new ChessBoard();
-
-        // White king at (1,5)
-        testBoard.addPiece(
-                new ChessPosition(1, 5),
-                new ChessPiece(TeamColor.WHITE, ChessPiece.PieceType.KING)
-        );
-
-        // Black rook at (1,1)
-        testBoard.addPiece(
-                new ChessPosition(1, 1),
-                new ChessPiece(TeamColor.BLACK, ChessPiece.PieceType.ROOK)
-        );
-
-        ChessGame game = new ChessGame();
-
-        System.out.println(game.isInCheck(testBoard, TeamColor.WHITE));
-        System.out.println(game.isInCheck(testBoard, TeamColor.BLACK));
     }
 
     /**
