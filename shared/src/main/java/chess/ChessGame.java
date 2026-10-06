@@ -128,7 +128,7 @@ public class ChessGame {
         return board;
     }
 
-    public ChessPosition findKing(ChessBoard board, TeamColor color){
+    private ChessPosition findKing(ChessBoard board, TeamColor color){
         //Find where the king is at on the board for a particular team
         for (int row = 1; row <= 8; row++) {
             for (int col = 1; col <= 8; col++) {
@@ -142,8 +142,8 @@ public class ChessGame {
         return null;//if king not found (shouldn't happen)
     }
 
-    public void makeTestMove(){
-        //move a piece on the test baord
+    private void makeTestMove(){
+        //move a piece on the test board
         throw new RuntimeException("Not implemented");
     }
 
