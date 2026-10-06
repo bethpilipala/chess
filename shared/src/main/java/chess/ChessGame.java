@@ -22,15 +22,15 @@ public class ChessGame {
     }
 
     public static void main(String[] args) { //Included for testing purposes and will be deleted!
-        ChessBoard board = new ChessBoard();
-        board.resetBoard();
-        ChessGame game = new ChessGame();
+        ChessBoard testBoard = new ChessBoard();
+        testBoard.resetBoard();
 
-        ChessPosition whiteKing = game.findKing(board, TeamColor.WHITE);
-        ChessPosition blackKing = game.findKing(board, TeamColor.BLACK);
+        //move the white pawn from (2, 5) to (4, 5)
+        ChessMove move = new ChessMove(new ChessPosition(2, 5), new ChessPosition(4, 5), null);
+        makeTestMove(testBoard, move);
 
-        System.out.println("white king: " + whiteKing);
-        System.out.println("black king: " + blackKing);
+        System.out.println(testBoard.getPiece(new ChessPosition(2, 5)) == null);  //should print tru
+        System.out.println(testBoard.getPiece(new ChessPosition(4, 5)) == null);  //should print false
     }
 
     /**
@@ -142,9 +142,17 @@ public class ChessGame {
         return null;//if king not found (shouldn't happen)
     }
 
-    private void makeTestMove(){
-        //move a piece on the test board
-        throw new RuntimeException("Not implemented");
+    private static void makeTestMove(ChessBoard board, ChessMove move){
+        //move a piece on the test board (does not validiate the move)
+
+        ChessPiece piece = board.getPiece(move.getStartPosition()); //get the piece at the start
+        board.addPiece(move.getStartPosition(), null); //clear the start square
+
+        //Handling promotion pieces
+        if (move.getPromotionPiece() != null)
+            piece = new ChessPiece(piece.getTeamColor(), move.getPromotionPiece());
+
+        board.addPiece(move.getEndPosition(), piece);
     }
 
     @Override
