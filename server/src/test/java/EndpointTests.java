@@ -82,4 +82,49 @@ public class EndpointTests {
 
         assertTrue(ex.getMessage().contains("Error"));
     }
+
+    @Test
+    public void loginSuccessTest() throws Exception {
+        UserDAO userDAO = new MemoryUserDAO();
+        AuthDAO authDAO = new MemoryAuthDAO();
+        UserService userService = new UserService(userDAO, authDAO);
+
+        userService.register(new RegisterRequest("lizzie", "ilovedarcy", "elizabethbennett@mail.com"));
+
+        AuthResult result = userService.login(new LoginRequest("lizzie", "ilovedarcy"));
+
+        assertNotNull(result);
+        assertEquals("lizzie", result.username());
+        assertNotNull(result.authToken());
+        assertNotNull(authDAO.getAuth(result.authToken()));
+    }
+
+    @Test
+    public void loginWrongPasswordTest() throws Exception {
+        UserDAO userDAO = new MemoryUserDAO();
+        AuthDAO authDAO = new MemoryAuthDAO();
+        UserService userService = new UserService(userDAO, authDAO);
+
+        userService.register(new RegisterRequest("lizzie", "ilovedarcy", "elizabethbennett@mail.com"));
+
+        UnauthorizedException ex = assertThrows(UnauthorizedException.class, () ->
+                userService.login(new LoginRequest("lizzie", "ihatedarcy"))
+        );
+        assertTrue(ex.getMessage().contains("Error"));
+    }
+
+    @Test
+    public void loginBadRequestTest() {
+        UserDAO userDAO = new MemoryUserDAO();
+        AuthDAO authDAO = new MemoryAuthDAO();
+        UserService userService = new UserService(userDAO, authDAO);
+
+        //missing username
+        LoginRequest bad = new LoginRequest(null, "password");
+
+        BadRequestException ex = assertThrows(BadRequestException.class, () ->
+                userService.login(bad)
+        );
+        assertTrue(ex.getMessage().contains("Error"));
+    }
 }
