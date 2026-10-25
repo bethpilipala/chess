@@ -32,4 +32,54 @@ public class EndpointTests {
         assertNull(authDAO.getAuth("token"));
         assertTrue(gameDAO.listGames().isEmpty());
     }
+
+    @Test
+    public void registerSuccessTest() throws Exception {
+        UserDAO userDAO = new MemoryUserDAO();
+        AuthDAO authDAO = new MemoryAuthDAO();
+        UserService userService = new UserService(userDAO, authDAO);
+
+        RegisterRequest req = new RegisterRequest("newUser", "pw123", "new@mail.com");
+
+        AuthResult result = userService.register(req);
+
+        assertNotNull(result);
+        assertEquals("newUser", result.username());
+        assertNotNull(result.authToken());
+
+        assertNotNull(userDAO.getUser("newUser"));
+
+        assertNotNull(authDAO.getAuth(result.authToken()));
+    }
+
+    @Test
+    public void registerDuplicateUserTest() throws Exception {
+        UserDAO userDAO = new MemoryUserDAO();
+        AuthDAO authDAO = new MemoryAuthDAO();
+        UserService userService = new UserService(userDAO, authDAO);
+
+        RegisterRequest req = new RegisterRequest("sameUser", "pw", "a@mail.com");
+        userService.register(req);
+
+        AlreadyTakenException ex = assertThrows(AlreadyTakenException.class, () ->
+                userService.register(new RegisterRequest("sameUser", "pw2", "b@mail.com"))
+        );
+
+        assertTrue(ex.getMessage().contains("Error"));
+    }
+
+    @Test
+    public void registerBadRequestTest() {
+        UserDAO userDAO = new MemoryUserDAO();
+        AuthDAO authDAO = new MemoryAuthDAO();
+        UserService userService = new UserService(userDAO, authDAO);
+
+        RegisterRequest bad = new RegisterRequest("user", null, "user@mail.com");
+
+        BadRequestException ex = assertThrows(BadRequestException.class, () ->
+                userService.register(bad)
+        );
+
+        assertTrue(ex.getMessage().contains("Error"));
+    }
 }

@@ -73,6 +73,15 @@ public class Server {
         });
 
         //POST /user
+        javalin.post("/user", ctx -> {
+            RegisterRequest request = gson.fromJson(ctx.body(), RegisterRequest.class);
+            AuthResult result = userService.register(request);
+
+            ctx.status(200);
+            ctx.contentType("application/json");
+            ctx.result(gson.toJson(result));
+        });
+
         //POST /session
         //DELETE /session
         //GET /game
