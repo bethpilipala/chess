@@ -56,21 +56,26 @@ public class ChessMove {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) //if they are the same thing (memory?), they are equal
+        if (this == obj) {//if they are the same thing (memory?), they are equal
             return true;
+        }
 
-        if (!(obj instanceof ChessMove)) //If not a ChessMove, can't be equal
+        if (!(obj instanceof ChessMove)) {//If not a ChessMove, can't be equal
             return false;
+        }
 
         ChessMove other = (ChessMove) obj; // Convert the Object into a ChessMove
 
         // Checking the positions
-        if (!java.util.Objects.equals(startPosition, other.startPosition))
+        if (!java.util.Objects.equals(startPosition, other.startPosition)) {
             return false;
-        else if (!java.util.Objects.equals(endPosition, other.endPosition))
+        }
+        else if (!java.util.Objects.equals(endPosition, other.endPosition)) {
             return false;
-        else if (promotionPiece != other.promotionPiece)
+        }
+        else if (promotionPiece != other.promotionPiece) {
             return false;
+        }
 
         return true;
     }

@@ -9,10 +9,12 @@ public abstract class MoveRules {
     public abstract Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition position);
 
     protected boolean inBounds(int row, int column) {
-        if (row >= 1 && row <= 8 && column >= 1 && column <= 8)
+        if (row >= 1 && row <= 8 && column >= 1 && column <= 8) {
             return true;
-        else
+        }
+        else {
             return false;
+        }
     }
 
     protected boolean isEnemy(ChessBoard board, ChessPosition start, ChessPosition end){
@@ -22,10 +24,12 @@ public abstract class MoveRules {
         if(endPiece == null) //Not occupied
             return false;
 
-        if(startPiece.getTeamColor() != endPiece.getTeamColor()) //opposite color
+        if(startPiece.getTeamColor() != endPiece.getTeamColor()) { //opposite color
             return true;
-        else
+        }
+        else {
             return false;
+        }
     }
 
     protected void addSlidingMoves(ChessBoard board, ChessPosition start, int rowChange, int colChange, Collection<ChessMove> moves){
@@ -39,8 +43,9 @@ public abstract class MoveRules {
             ChessPosition end = new ChessPosition(row, col);
             ChessPiece endPiece = board.getPiece(end);
 
-            if(endPiece == null) //If space is not occupied
-                moves.add(new ChessMove(start, end, null)); //TODO: might need more promotion piece logic here?
+            if(endPiece == null) { //If space is not occupied
+                moves.add(new ChessMove(start, end, null));
+            }
             else { //If it IS occupied
                 if(isEnemy(board, start, end))
                     moves.add(new ChessMove(start, end, null));
@@ -59,17 +64,20 @@ public abstract class MoveRules {
         int row = start.getRow() + rowChange;
         int col = start.getColumn() + colChange;
 
-        if(!inBounds(row, col))
+        if(!inBounds(row, col)) {
             return;
+        }
 
         ChessPosition end = new ChessPosition(row, col);
         ChessPiece endPiece = board.getPiece(end);
 
-        if(endPiece == null)
+        if(endPiece == null) {
             moves.add(new ChessMove(start, end, null));
+        }
         else {
-            if (isEnemy(board, start, end))
+            if (isEnemy(board, start, end)) {
                 moves.add(new ChessMove(start, end, null));
+            }
         }
 
     }

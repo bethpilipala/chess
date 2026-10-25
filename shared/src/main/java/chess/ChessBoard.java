@@ -64,8 +64,9 @@ public class ChessBoard {
     }
 
     private void setupPawns(ChessGame.TeamColor color, int row) {
-        for (int col = 1; col <= 8; col++)
-            addPiece( new ChessPosition(row, col), new ChessPiece(color, ChessPiece.PieceType.PAWN));
+        for (int col = 1; col <= 8; col++) {
+            addPiece(new ChessPosition(row, col), new ChessPiece(color, ChessPiece.PieceType.PAWN));
+        }
     }
 
     public ChessBoard makeTestingBoard(){

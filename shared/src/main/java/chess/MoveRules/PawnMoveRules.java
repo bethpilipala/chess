@@ -44,8 +44,9 @@ public class PawnMoveRules extends MoveRules {
                 if(row == startingRow && inBounds(secondStepRow, col)){
                     ChessPosition secondStep = new ChessPosition(secondStepRow, col);
 
-                    if(board.getPiece(secondStep) == null) //empty space
+                    if(board.getPiece(secondStep) == null) { //empty space
                         addPawnMove(moves, position, secondStep, promotionRow);
+                    }
                 }
             }
         }
@@ -56,15 +57,17 @@ public class PawnMoveRules extends MoveRules {
         if(inBounds(captureRow, col - 1)){ //Left capturing
             ChessPosition leftPosition = new ChessPosition(captureRow, col-1);
 
-            if(isEnemy(board, position, leftPosition))
-                addPawnMove(moves,position, leftPosition, promotionRow);
+            if(isEnemy(board, position, leftPosition)) {
+                addPawnMove(moves, position, leftPosition, promotionRow);
+            }
         }
 
         if(inBounds(captureRow, col + 1)) { //Right capturing
             ChessPosition rightPosition = new ChessPosition(captureRow, col + 1);
 
-            if(isEnemy(board, position, rightPosition))
+            if(isEnemy(board, position, rightPosition)) {
                 addPawnMove(moves, position, rightPosition, promotionRow);
+            }
         }
 
         return moves;
@@ -79,7 +82,8 @@ public class PawnMoveRules extends MoveRules {
             moves.add(new ChessMove(start, end, ChessPiece.PieceType.BISHOP));
             moves.add(new ChessMove(start, end, ChessPiece.PieceType.ROOK));
         }
-        else
-            moves.add(new ChessMove(start, end,null));
+        else {
+            moves.add(new ChessMove(start, end, null));
+        }
     }
 }

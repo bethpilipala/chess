@@ -58,8 +58,9 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ChessPiece piece = board.getPiece(myPosition);
 
-        if (piece == null)
+        if (piece == null) {
             return new ArrayList<>();
+        }
 
         MoveRules validMoves;
 

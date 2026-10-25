@@ -15,8 +15,9 @@ public class MemoryAuthDAO implements AuthDAO {
 
     @Override
     public void createAuth(AuthData auth) throws DataAccessException {
-        if (auth == null || auth.authToken() == null)
+        if (auth == null || auth.authToken() == null) {
             throw new DataAccessException("Error: bad request");
+        }
 
         auths.put(auth.authToken(), auth);
     }

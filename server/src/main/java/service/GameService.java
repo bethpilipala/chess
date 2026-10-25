@@ -24,8 +24,9 @@ public class GameService {
 
         requireAuth(authToken);
 
-        if (req == null || req.gameName() == null || req.gameName().isBlank())
+        if (req == null || req.gameName() == null || req.gameName().isBlank()) {
             throw new BadRequestException("Error: bad request");
+        }
 
         int id = gameDAO.createGame(req.gameName());
         return new CreateGameResult(id);
@@ -51,26 +52,31 @@ public class GameService {
 
         AuthData auth = requireAuth(authToken);
 
-        if (req == null || req.gameID() == null || req.playerColor() == null)
+        if (req == null || req.gameID() == null || req.playerColor() == null) {
             throw new BadRequestException("Error: bad request");
+        }
 
         String color = req.playerColor();
-        if (!color.equals("WHITE") && !color.equals("BLACK"))
+        if (!color.equals("WHITE") && !color.equals("BLACK")) {
             throw new BadRequestException("Error: bad request");
+        }
 
         GameData game = gameDAO.getGame(req.gameID());
-        if (game == null)
+        if (game == null) {
             throw new BadRequestException("Error: bad request");
+        }
 
         GameData updated;
         if (color.equals("WHITE")) {
-            if (game.whiteUsername() != null)
+            if (game.whiteUsername() != null) {
                 throw new AlreadyTakenException("Error: already taken");
+            }
 
             updated = new GameData(game.gameID(), auth.username(), game.blackUsername(), game.gameName(), game.game());
         } else {
-            if (game.blackUsername() != null)
+            if (game.blackUsername() != null) {
                 throw new AlreadyTakenException("Error: already taken");
+            }
 
             updated = new GameData(game.gameID(), game.whiteUsername(), auth.username(), game.gameName(), game.game());
         }
@@ -79,12 +85,14 @@ public class GameService {
     }
 
     private AuthData requireAuth(String authToken) throws UnauthorizedException {
-        if (authToken == null || authToken.isBlank())
+        if (authToken == null || authToken.isBlank()) {
             throw new UnauthorizedException("Error: unauthorized");
+        }
 
         AuthData auth = authDAO.getAuth(authToken);
-        if (auth == null) 
+        if (auth == null) {
             throw new UnauthorizedException("Error: unauthorized");
+        }
 
         return auth;
     }

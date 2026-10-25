@@ -54,8 +54,9 @@ public class ChessGame {
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ChessPiece piece = board.getPiece(startPosition);
-        if (piece == null)
+        if (piece == null) {
             return null;
+        }
 
         Collection<ChessMove> pieceMoves = piece.pieceMoves(board, startPosition);
         Collection<ChessMove> legalMoves = new ArrayList<>();
@@ -81,23 +82,28 @@ public class ChessGame {
         ChessPiece piece = board.getPiece(move.getStartPosition());
 
         //checking move prerequisites
-        if (piece == null)
+        if (piece == null) {
             throw new InvalidMoveException("No piece at start position");
-        if (piece.getTeamColor() != teamTurn)
+        }
+        if (piece.getTeamColor() != teamTurn) {
             throw new InvalidMoveException("Not your turn");
+        }
 
         //is it a valid move?
         Collection<ChessMove> legalMoves = validMoves(move.getStartPosition());
-        if (!legalMoves.contains(move))
+        if (!legalMoves.contains(move)) {
             throw new InvalidMoveException("Move is not legal");
+        }
 
         makeTestMove(this.board, move); //now implementing that test move
 
         //end move, now switching turns
-        if (teamTurn == TeamColor.WHITE)
+        if (teamTurn == TeamColor.WHITE) {
             teamTurn = TeamColor.BLACK;
-        else
+        }
+        else {
             teamTurn = TeamColor.WHITE;
+        }
     }
 
     /**
@@ -157,8 +163,9 @@ public class ChessGame {
                 ChessPosition position = new ChessPosition(row, col);
                 ChessPiece piece = board.getPiece(position);
 
-                if (piece != null && piece.getTeamColor() == color && piece.getPieceType() == ChessPiece.PieceType.KING)
+                if (piece != null && piece.getTeamColor() == color && piece.getPieceType() == ChessPiece.PieceType.KING) {
                     return position;
+                }
             }
         }
         return null;//if king not found (shouldn't happen)
@@ -171,8 +178,9 @@ public class ChessGame {
         board.addPiece(move.getStartPosition(), null); //clear the start square
 
         //Handling promotion pieces
-        if (move.getPromotionPiece() != null)
+        if (move.getPromotionPiece() != null) {
             piece = new ChessPiece(piece.getTeamColor(), move.getPromotionPiece());
+        }
 
         board.addPiece(move.getEndPosition(), piece);
     }
@@ -180,8 +188,9 @@ public class ChessGame {
     private boolean isInCheck(ChessBoard board, TeamColor color){
         //using method overloading principle so I can check on my copy of the board as well
         ChessPosition kingPos = findKing(board, color);
-        if (kingPos == null)
+        if (kingPos == null) {
             return false; //shouldnt exist but checking anyways
+        }
 
         //parse over the board and check if an enemy can get the king
         for (int row = 1; row <= 8; row++) {
@@ -212,8 +221,9 @@ public class ChessGame {
 
                 if (piece != null && piece.getTeamColor() == team) { //check if there's this teams piece on this space
                     Collection<ChessMove> moves = validMoves(position);
-                    if (!moves.isEmpty()) //if no moves are valid
+                    if (!moves.isEmpty()) {//if no moves are valid
                         return true;
+                    }
                 }
             }
         }

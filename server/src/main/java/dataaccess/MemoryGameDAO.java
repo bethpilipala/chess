@@ -17,8 +17,9 @@ public class MemoryGameDAO implements GameDAO {
 
     @Override
     public int createGame(String gameName) throws DataAccessException {
-        if (gameName == null || gameName.isBlank())
+        if (gameName == null || gameName.isBlank()) {
             throw new DataAccessException("Error: bad request");
+        }
 
         int id = nextGameId++;
         GameData game = new GameData(id, null, null, gameName, new ChessGame());
@@ -38,8 +39,9 @@ public class MemoryGameDAO implements GameDAO {
 
     @Override
     public void updateGame(GameData game) throws DataAccessException {
-        if (game == null || !games.containsKey(game.gameID()))
+        if (game == null || !games.containsKey(game.gameID())) {
             throw new DataAccessException("Error: bad request");
+        }
 
         games.put(game.gameID(), game);
     }

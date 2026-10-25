@@ -25,8 +25,6 @@ public class Server {
     public Server() {
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
 
-        // Register your endpoints and exception handlers here.
-
         //EXCEPTIONS
         //400: bad request input
         javalin.exception(BadRequestException.class, (e, ctx) -> {
@@ -34,28 +32,24 @@ public class Server {
             ctx.contentType("application/json");
             ctx.result(gson.toJson(Map.of("message", e.getMessage())));
         });
-
         //401: invalid/missing auth token
         javalin.exception(UnauthorizedException.class, (e, ctx) -> {
             ctx.status(401);
             ctx.contentType("application/json");
             ctx.result(gson.toJson(Map.of("message", e.getMessage())));
         });
-
         //403- username already taken, color already taken, etc.
         javalin.exception(AlreadyTakenException.class, (e, ctx) -> {
             ctx.status(403);
             ctx.contentType("application/json");
             ctx.result(gson.toJson(Map.of("message", e.getMessage())));
         });
-
         //500: data/storage failures
         javalin.exception(DataAccessException.class, (e, ctx) -> {
             ctx.status(500);
             ctx.contentType("application/json");
             ctx.result(gson.toJson(Map.of("message", e.getMessage())));
         });
-
         //500 other
         javalin.exception(Exception.class, (e, ctx) -> {
             ctx.status(500);
@@ -63,7 +57,7 @@ public class Server {
             ctx.result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
         });
 
-        //ENDPOINTS (TODO)
+        //ENDPOINTS
         //DELETE /db
         javalin.delete("/db", ctx -> {
             clearService.clear();
@@ -76,7 +70,6 @@ public class Server {
         javalin.post("/user", ctx -> {
             RegisterRequest request = gson.fromJson(ctx.body(), RegisterRequest.class);
             AuthResult result = userService.register(request);
-
             ctx.status(200);
             ctx.contentType("application/json");
             ctx.result(gson.toJson(result));
@@ -86,7 +79,6 @@ public class Server {
         javalin.post("/session", ctx -> {
             LoginRequest request = gson.fromJson(ctx.body(), LoginRequest.class);
             AuthResult result = userService.login(request);
-
             ctx.status(200);
             ctx.contentType("application/json");
             ctx.result(gson.toJson(result));
@@ -96,7 +88,6 @@ public class Server {
         javalin.delete("/session", ctx -> {
             String authToken = ctx.header("Authorization");
             userService.logout(authToken);
-
             ctx.status(200);
             ctx.contentType("application/json");
             ctx.result(gson.toJson(Map.of()));
@@ -106,7 +97,6 @@ public class Server {
         javalin.get("/game", ctx -> {
             String authToken = ctx.header("Authorization");
             ListGamesResult result = gameService.listGames(authToken);
-
             ctx.status(200);
             ctx.contentType("application/json");
             ctx.result(gson.toJson(result));
@@ -116,9 +106,7 @@ public class Server {
         javalin.post("/game", ctx -> {
             String authToken = ctx.header("Authorization");
             CreateGameRequest request = gson.fromJson(ctx.body(), CreateGameRequest.class);
-
             CreateGameResult result = gameService.createGame(request, authToken);
-
             ctx.status(200);
             ctx.contentType("application/json");
             ctx.result(gson.toJson(result));
@@ -128,9 +116,7 @@ public class Server {
         javalin.put("/game", ctx -> {
             String authToken = ctx.header("Authorization");
             JoinGameRequest request = gson.fromJson(ctx.body(), JoinGameRequest.class);
-
             gameService.joinGame(request, authToken);
-
             ctx.status(200);
             ctx.contentType("application/json");
             ctx.result(gson.toJson(Map.of()));

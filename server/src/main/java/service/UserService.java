@@ -21,8 +21,9 @@ public class UserService {
 
         validateRegister(req);
 
-        if (userDAO.getUser(req.username()) != null)
+        if (userDAO.getUser(req.username()) != null) {
             throw new AlreadyTakenException("Error: already taken");
+        }
 
         userDAO.createUser(new UserData(req.username(), req.password(), req.email()));
 
@@ -38,8 +39,9 @@ public class UserService {
         validateLogin(req);
 
         UserData user = userDAO.getUser(req.username());
-        if (user == null || !user.password().equals(req.password()))
+        if (user == null || !user.password().equals(req.password())) {
             throw new UnauthorizedException("Error: unauthorized");
+        }
 
         String token = UUID.randomUUID().toString();
         authDAO.createAuth(new AuthData(token, user.username()));
@@ -48,8 +50,9 @@ public class UserService {
     }
 
     public void logout(String authToken) throws UnauthorizedException {
-        if (authToken == null || authToken.isBlank() || authDAO.getAuth(authToken) == null) 
+        if (authToken == null || authToken.isBlank() || authDAO.getAuth(authToken) == null) {
             throw new UnauthorizedException("Error: unauthorized");
+        }
         authDAO.deleteAuth(authToken);
     }
 

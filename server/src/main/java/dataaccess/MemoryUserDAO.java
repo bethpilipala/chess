@@ -16,10 +16,12 @@ public class MemoryUserDAO implements UserDAO {
     @Override
     public void createUser(UserData user) throws DataAccessException {
 
-        if (user == null || user.username() == null)
+        if (user == null || user.username() == null) {
             throw new DataAccessException("Error: bad request");
-        if (users.containsKey(user.username()))
+        }
+        if (users.containsKey(user.username())) {
             throw new DataAccessException("Error: already taken");
+        }
 
         users.put(user.username(), user);
     }
