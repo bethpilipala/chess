@@ -192,7 +192,7 @@ public class EndpointTests {
 
         authDAO.createAuth(new model.AuthData("createtoken", "helaman"));
 
-        CreateGameResult result = gameService.createGame(new CreateGameRequest("My New Game"), "token-create");
+        CreateGameResult result = gameService.createGame(new CreateGameRequest("My New Game"), "createtoken");
 
         assertNotNull(result);
         assertNotNull(result.gameID());
@@ -222,6 +222,52 @@ public class EndpointTests {
 
         BadRequestException ex = assertThrows(BadRequestException.class, () ->
                 gameService.createGame(new CreateGameRequest("   "), "createtoken2")
+        );
+        assertTrue(ex.getMessage().contains("Error"));
+    }
+
+    @Test
+    public void joinGameSuccessTest() throws Exception {
+        AuthDAO authDAO = new MemoryAuthDAO();
+        GameDAO gameDAO = new MemoryGameDAO();
+        GameService gameService = new GameService(authDAO, gameDAO);
+
+        authDAO.createAuth(new model.AuthData("tokentojoin", "adam"));
+        int gameId = gameDAO.createGame("Joinable Game");
+
+        gameService.joinGame(new JoinGameRequest("WHITE", gameId), "tokentojoin");
+
+        var game = gameDAO.getGame(gameId);
+        assertEquals("adam", game.whiteUsername());
+    }
+
+    @Test
+    public void joinGameUnauthorizedTest() throws Exception {
+        AuthDAO authDAO = new MemoryAuthDAO();
+        GameDAO gameDAO = new MemoryGameDAO();
+        GameService gameService = new GameService(authDAO, gameDAO);
+        int gameId = gameDAO.createGame("Joinable Game");
+
+        UnauthorizedException ex = assertThrows(UnauthorizedException.class, () ->
+                gameService.joinGame(new JoinGameRequest("BLACK", gameId), "badtoken")
+        );
+        assertTrue(ex.getMessage().contains("Error"));
+    }
+
+    @Test
+    public void joinGameColorAlreadyTakenTest() throws Exception {
+        AuthDAO authDAO = new MemoryAuthDAO();
+        GameDAO gameDAO = new MemoryGameDAO();
+        GameService gameService = new GameService(authDAO, gameDAO);
+
+        authDAO.createAuth(new model.AuthData("token1", "adam"));
+        authDAO.createAuth(new model.AuthData("token2", "eve"));
+        int gameId = gameDAO.createGame("AlreadyTakenColor");
+
+        gameService.joinGame(new JoinGameRequest("WHITE", gameId), "token1");
+
+        AlreadyTakenException ex = assertThrows(AlreadyTakenException.class, () ->
+                gameService.joinGame(new JoinGameRequest("WHITE", gameId), "token2")
         );
         assertTrue(ex.getMessage().contains("Error"));
     }

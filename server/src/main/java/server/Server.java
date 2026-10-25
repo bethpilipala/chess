@@ -125,7 +125,16 @@ public class Server {
         });
 
         //PUT /game
+        javalin.put("/game", ctx -> {
+            String authToken = ctx.header("Authorization");
+            JoinGameRequest request = gson.fromJson(ctx.body(), JoinGameRequest.class);
 
+            gameService.joinGame(request, authToken);
+
+            ctx.status(200);
+            ctx.contentType("application/json");
+            ctx.result(gson.toJson(Map.of()));
+        });
     }
 
     public int run(int desiredPort) {
