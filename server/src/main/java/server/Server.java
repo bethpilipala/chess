@@ -113,6 +113,17 @@ public class Server {
         });
 
         //POST /game
+        javalin.post("/game", ctx -> {
+            String authToken = ctx.header("Authorization");
+            CreateGameRequest request = gson.fromJson(ctx.body(), CreateGameRequest.class);
+
+            CreateGameResult result = gameService.createGame(request, authToken);
+
+            ctx.status(200);
+            ctx.contentType("application/json");
+            ctx.result(gson.toJson(result));
+        });
+
         //PUT /game
 
     }

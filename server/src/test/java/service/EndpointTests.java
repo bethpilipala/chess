@@ -183,4 +183,46 @@ public class EndpointTests {
         );
         assertTrue(ex.getMessage().contains("Error"));
     }
+
+    @Test
+    public void createGameSuccessTest() throws Exception {
+        AuthDAO authDAO = new MemoryAuthDAO();
+        GameDAO gameDAO = new MemoryGameDAO();
+        GameService gameService = new GameService(authDAO, gameDAO);
+
+        authDAO.createAuth(new model.AuthData("createtoken", "helaman"));
+
+        CreateGameResult result = gameService.createGame(new CreateGameRequest("My New Game"), "token-create");
+
+        assertNotNull(result);
+        assertNotNull(result.gameID());
+        assertTrue(result.gameID() > 0);
+        assertNotNull(gameDAO.getGame(result.gameID()));
+    }
+
+    @Test
+    public void createGameUnauthorizedTest() {
+        AuthDAO authDAO = new MemoryAuthDAO();
+        GameDAO gameDAO = new MemoryGameDAO();
+        GameService gameService = new GameService(authDAO, gameDAO);
+
+        UnauthorizedException ex = assertThrows(UnauthorizedException.class, () ->
+                gameService.createGame(new CreateGameRequest("Game"), "badtoken")
+        );
+        assertTrue(ex.getMessage().contains("Error"));
+    }
+
+    @Test
+    public void createGameBadRequestTest() throws Exception {
+        AuthDAO authDAO = new MemoryAuthDAO();
+        GameDAO gameDAO = new MemoryGameDAO();
+        GameService gameService = new GameService(authDAO, gameDAO);
+
+        authDAO.createAuth(new model.AuthData("createtoken2", "helaman"));
+
+        BadRequestException ex = assertThrows(BadRequestException.class, () ->
+                gameService.createGame(new CreateGameRequest("   "), "createtoken2")
+        );
+        assertTrue(ex.getMessage().contains("Error"));
+    }
 }
