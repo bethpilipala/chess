@@ -103,6 +103,15 @@ public class Server {
         });
 
         //GET /game
+        javalin.get("/game", ctx -> {
+            String authToken = ctx.header("Authorization");
+            ListGamesResult result = gameService.listGames(authToken);
+
+            ctx.status(200);
+            ctx.contentType("application/json");
+            ctx.result(gson.toJson(result));
+        });
+
         //POST /game
         //PUT /game
 

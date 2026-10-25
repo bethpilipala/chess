@@ -154,4 +154,33 @@ public class EndpointTests {
         );
         assertTrue(ex.getMessage().contains("Error"));
     }
+
+    @Test
+    public void listGamesSuccessTest() throws Exception {
+        AuthDAO authDAO = new MemoryAuthDAO();
+        GameDAO gameDAO = new MemoryGameDAO();
+        GameService gameService = new GameService(authDAO, gameDAO);
+
+        authDAO.createAuth(new model.AuthData("token1", "nephi"));
+        gameDAO.createGame("Game 1");
+        gameDAO.createGame("Game 2");
+
+        ListGamesResult result = gameService.listGames("token1");
+
+        assertNotNull(result);
+        assertNotNull(result.games());
+        assertEquals(2, result.games().size());
+    }
+
+    @Test
+    public void listGamesUnauthorizedTest() {
+        AuthDAO authDAO = new MemoryAuthDAO();
+        GameDAO gameDAO = new MemoryGameDAO();
+        GameService gameService = new GameService(authDAO, gameDAO);
+
+        UnauthorizedException ex = assertThrows(UnauthorizedException.class, () ->
+                gameService.listGames("badtoken")
+        );
+        assertTrue(ex.getMessage().contains("Error"));
+    }
 }
