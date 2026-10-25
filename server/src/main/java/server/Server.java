@@ -65,6 +65,13 @@ public class Server {
 
         //ENDPOINTS (TODO)
         //DELETE /db
+        javalin.delete("/db", ctx -> {
+            clearService.clear();
+            ctx.status(200);
+            ctx.contentType("application/json");
+            ctx.result(gson.toJson(Map.of()));
+        });
+
         //POST /user
         //POST /session
         //DELETE /session
