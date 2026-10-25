@@ -127,4 +127,31 @@ public class EndpointTests {
         );
         assertTrue(ex.getMessage().contains("Error"));
     }
+
+    @Test
+    public void logoutSuccessTest() throws Exception {
+        UserDAO userDAO = new MemoryUserDAO();
+        AuthDAO authDAO = new MemoryAuthDAO();
+        UserService userService = new UserService(userDAO, authDAO);
+
+        AuthResult reg = userService.register(new RegisterRequest("harry", "wizardsrock123", "potter@gmail.com"));
+        String token = reg.authToken();
+        assertNotNull(authDAO.getAuth(token));
+
+        userService.logout(token);
+
+        assertNull(authDAO.getAuth(token));
+    }
+
+    @Test
+    public void logoutUnauthorizedBadTokenTest() {
+        UserDAO userDAO = new MemoryUserDAO();
+        AuthDAO authDAO = new MemoryAuthDAO();
+        UserService userService = new UserService(userDAO, authDAO);
+
+        UnauthorizedException ex = assertThrows(UnauthorizedException.class, () ->
+                userService.logout("notatoken")
+        );
+        assertTrue(ex.getMessage().contains("Error"));
+    }
 }

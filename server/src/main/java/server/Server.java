@@ -93,6 +93,15 @@ public class Server {
         });
 
         //DELETE /session
+        javalin.delete("/session", ctx -> {
+            String authToken = ctx.header("Authorization");
+            userService.logout(authToken);
+
+            ctx.status(200);
+            ctx.contentType("application/json");
+            ctx.result(gson.toJson(Map.of()));
+        });
+
         //GET /game
         //POST /game
         //PUT /game
