@@ -36,18 +36,13 @@ public final class DatabaseSchema {
                 )
                 """;
 
-        Connection connection = null;
-        Statement statement = null;
-
-        try {
-            connection = DatabaseManager.getConnection();
-            statement = connection.createStatement();
-
+        try (var connection = DatabaseManager.getConnection();
+             var statement = connection.createStatement()) {
             statement.execute(createUsers);
             statement.execute(createAuths);
             statement.execute(createGames);
         } catch (SQLException e) {
-            throw new DataAccessException("Error-- Unable to initialize database schema", e);
+            throw new DataAccessException("Error: unable to initialize database schema", e);
         }
     }
 }
