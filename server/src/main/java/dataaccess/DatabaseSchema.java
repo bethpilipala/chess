@@ -48,5 +48,6 @@ public final class DatabaseSchema {
             statement.execute(createGames);
         } catch (SQLException e) {
             throw new DataAccessException("Error-- Unable to initialize database schema", e);
+        }
     }
 }

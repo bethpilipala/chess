@@ -49,7 +49,7 @@ public class UserService {
         return new AuthResult(user.username(), token);
     }
 
-    public void logout(String authToken) throws UnauthorizedException {
+    public void logout(String authToken) throws UnauthorizedException, DataAccessException {
         if (authToken == null || authToken.isBlank() || authDAO.getAuth(authToken) == null) {
             throw new UnauthorizedException("Error: unauthorized");
         }

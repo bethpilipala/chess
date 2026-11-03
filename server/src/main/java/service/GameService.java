@@ -32,7 +32,7 @@ public class GameService {
         return new CreateGameResult(id);
     }
 
-    public ListGamesResult listGames(String authToken) throws UnauthorizedException {
+    public ListGamesResult listGames(String authToken) throws UnauthorizedException, DataAccessException {
         requireAuth(authToken);
 
         List<GameListEntry> games = new ArrayList<>();
@@ -84,7 +84,7 @@ public class GameService {
         gameDAO.updateGame(updated);
     }
 
-    private AuthData requireAuth(String authToken) throws UnauthorizedException {
+    private AuthData requireAuth(String authToken) throws UnauthorizedException, DataAccessException {
         if (authToken == null || authToken.isBlank()) {
             throw new UnauthorizedException("Error: unauthorized");
         }
