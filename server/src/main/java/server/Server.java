@@ -12,7 +12,7 @@ public class Server {
     private final Javalin javalin;
     private final Gson gson = new Gson();
 
-    private static final boolean USE_SQL_DAOS = false;
+    private static final boolean USE_SQL_DAOS = true;
 
     // DAOs
     private final UserDAO userDAO;
@@ -140,6 +140,14 @@ public class Server {
     }
 
     public int run(int desiredPort) {
+        if (USE_SQL_DAOS) {
+            try {
+                DatabaseSchema.initialize();
+            } catch (DataAccessException e) {
+                throw new IllegalStateException("Error: unable to initialize database", e);
+            }
+        }
+
         javalin.start(desiredPort);
         return javalin.port();
     }
