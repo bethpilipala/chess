@@ -12,17 +12,33 @@ public class Server {
     private final Javalin javalin;
     private final Gson gson = new Gson();
 
-    //DAOs
-    private final UserDAO userDAO = new MemoryUserDAO();
-    private final AuthDAO authDAO = new MemoryAuthDAO();
-    private final GameDAO gameDAO = new MemoryGameDAO();
+    private static final boolean USE_SQL_DAOS = false;
 
-    //Services
-    private final ClearService clearService = new ClearService(userDAO, authDAO, gameDAO);
-    private final UserService userService = new UserService(userDAO, authDAO);
-    private final GameService gameService = new GameService(authDAO, gameDAO);
+    // DAOs
+    private final UserDAO userDAO;
+    private final AuthDAO authDAO;
+    private final GameDAO gameDAO;
+
+    // Services
+    private final ClearService clearService;
+    private final UserService userService;
+    private final GameService gameService;
 
     public Server() {
+        if (USE_SQL_DAOS) {
+            userDAO = new SqlUserDAO();
+            authDAO = new SqlAuthDAO();
+            gameDAO = new SqlGameDAO();
+        } else {
+            userDAO = new MemoryUserDAO();
+            authDAO = new MemoryAuthDAO();
+            gameDAO = new MemoryGameDAO();
+        }
+
+        clearService = new ClearService(userDAO, authDAO, gameDAO);
+        userService = new UserService(userDAO, authDAO);
+        gameService = new GameService(authDAO, gameDAO);
+
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
 
         //EXCEPTIONS
