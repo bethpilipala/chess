@@ -62,9 +62,13 @@ public class Server {
         });
         //500: data/storage failures
         javalin.exception(DataAccessException.class, (e, ctx) -> {
+            String message = e.getMessage();
+            if (message == null || !message.toLowerCase().contains("error")) {
+                message = "Error: " + message;
+            }
             ctx.status(500);
             ctx.contentType("application/json");
-            ctx.result(gson.toJson(Map.of("message", e.getMessage())));
+            ctx.result(gson.toJson(Map.of("message", message)));
         });
         //500 other
         javalin.exception(Exception.class, (e, ctx) -> {
