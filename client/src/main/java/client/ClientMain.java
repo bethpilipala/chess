@@ -11,8 +11,19 @@ public class ClientMain {
     private String authToken;
 
     public static void main(String[] args) {
-        var piece = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+        ClientMain client = new ClientMain();
+
+        var piece = new ChessPiece(
+                ChessGame.TeamColor.WHITE,
+                ChessPiece.PieceType.PAWN
+        );
         System.out.println("♕ 240 Chess Client: " + piece);
+
+        client.login();
+
+        if (client.authToken != null) {
+            client.logout();
+        }
     }
 
     private void login() {
@@ -35,6 +46,16 @@ public class ClientMain {
     private String readLine(String prompt) {
         System.out.print(prompt);
         return scanner.hasNextLine() ? scanner.nextLine() : null;
+    }
+
+    private void logout() {
+        try {
+            facade.logout(authToken);
+            authToken = null;
+            System.out.println("You are signed out.");
+        } catch (ServerFacade.FacadeException e) {
+            System.out.println("Logout failed: " + e.getMessage());
+        }
     }
 
 
