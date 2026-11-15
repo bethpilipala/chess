@@ -162,4 +162,44 @@ public class ClientMain {
             System.out.println("Could not list games: " + e.getMessage());
         }
     }
+
+    private ServerFacade.GameSummary selectGame() {
+        try {
+            games = facade.listGames(authToken);
+        } catch (ServerFacade.FacadeException e) {
+            System.out.println("Could not load games: " + e.getMessage());
+            return null;
+        }
+
+        if (games.isEmpty()) {
+            System.out.println("There are no games to select.");
+            return null;
+        }
+
+        for (int i = 0; i < games.size(); i++) {
+            var game = games.get(i);
+            String white = game.whiteUsername() == null ? "open" : game.whiteUsername();
+            String black = game.blackUsername() == null ? "open" : game.blackUsername();
+
+            System.out.printf("%d. %s — White: %s, Black: %s%n",
+                    i + 1, game.gameName(), white, black);
+        }
+
+        String input = readLine("Game number (blank to cancel): ");
+        if (input == null || input.isBlank()) {
+            return null;
+        }
+
+        try {
+            int number = Integer.parseInt(input.trim());
+            if (number < 1 || number > games.size()) {
+                System.out.println("Choose a number from the list.");
+                return null;
+            }
+            return games.get(number - 1);
+        } catch (NumberFormatException e) {
+            System.out.println("Enter a number from the list.");
+            return null;
+        }
+    }
 }
