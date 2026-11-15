@@ -108,9 +108,10 @@ public class ClientMain {
     private void handleSignedIn(String command) {
         switch (command) {
             case "help" -> System.out.println(
-                    "Commands: help, create game, list games, logout, quit");
+                    "Commands: help, create game, list games, play game, logout, quit");
             case "create game" -> createGame();
             case "list games" -> listGames();
+            case "play game" -> playGame();
             case "logout" -> logout();
             default -> System.out.println("Unknown command. Type help.");
         }
@@ -200,6 +201,33 @@ public class ClientMain {
         } catch (NumberFormatException e) {
             System.out.println("Enter a number from the list.");
             return null;
+        }
+    }
+
+    private void playGame() {
+        var game = selectGame();
+        if (game == null) {
+            return;
+        }
+
+        String color = readLine("Choose color (white or black): ");
+        if (color == null) {
+            return;
+        }
+
+        color = color.trim();
+        if (!color.equalsIgnoreCase("white") && !color.equalsIgnoreCase("black")) {
+            System.out.println("Enter white or black.");
+            return;
+        }
+
+        String serverColor = color.toUpperCase();
+        try {
+            facade.joinGame(authToken, game.gameID(), serverColor);
+            System.out.println("Joined " + game.gameName() + " as " + serverColor + ".");
+            BoardRenderer.render(new ChessGame(), serverColor.equals("BLACK"));
+        } catch (ServerFacade.FacadeException e) {
+            System.out.println("Could not join game: " + e.getMessage());
         }
     }
 }
