@@ -19,12 +19,29 @@ public class ClientMain {
         );
         System.out.println("♕ 240 Chess Client: " + piece);
 
-        client.login();
+        client.run();
+    }
 
-        if (client.authToken != null) {
-            client.logout();
+    private void run() {
+        System.out.println("Welcome to Chess! Type help to see commands.");
+
+        while (true) {
+            String prompt = authToken == null ? "[signed out] > " : "[signed in] > ";
+            String command = readLine(prompt);
+
+            if (command == null || command.trim().equalsIgnoreCase("quit")) {
+                System.out.println("Goodbye!");
+                return;
+            }
+
+            if (authToken == null) {
+                handleSignedOut(command.trim().toLowerCase());
+            } else {
+                handleSignedIn(command.trim().toLowerCase());
+            }
         }
     }
+
 
     private void login() {
         String username = readLine("Username: ");
@@ -58,5 +75,39 @@ public class ClientMain {
         }
     }
 
+    private void handleSignedOut(String command) {
+        switch (command) {
+            case "help" -> System.out.println(
+                    "Commands: help, register, login, quit");
+            case "register" -> register();
+            case "login" -> login();
+            default -> System.out.println("Unknown command. Type help.");
+        }
+    }
 
+    private void register() {
+        String username = readLine("Username: ");
+        String password = readLine("Password: ");
+        String email = readLine("Email: ");
+
+        if (username == null || password == null || email == null) {
+            return;
+        }
+
+        try {
+            AuthData auth = facade.register(username, password, email);
+            authToken = auth.authToken();
+            System.out.println("Registration successful. You are signed in.");
+        } catch (ServerFacade.FacadeException e) {
+            System.out.println("Registration failed: " + e.getMessage());
+        }
+    }
+
+    private void handleSignedIn(String command) {
+        switch (command) {
+            case "help" -> System.out.println("Commands: help, logout, quit");
+            case "logout" -> logout();
+            default -> System.out.println("Unknown command. Type help.");
+        }
+    }
 }
