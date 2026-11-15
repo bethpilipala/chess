@@ -21,8 +21,9 @@ public abstract class MoveRules {
         ChessPiece startPiece = board.getPiece(start);
         ChessPiece endPiece = board.getPiece(end);
 
-        if(endPiece == null) //Not occupied
+        if(endPiece == null) { //Not occupied
             return false;
+        }
 
         if(startPiece.getTeamColor() != endPiece.getTeamColor()) { //opposite color
             return true;
