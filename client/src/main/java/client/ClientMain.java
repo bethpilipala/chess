@@ -108,10 +108,11 @@ public class ClientMain {
     private void handleSignedIn(String command) {
         switch (command) {
             case "help" -> System.out.println(
-                    "Commands: help, create game, list games, play game, logout, quit");
+                    "Commands: help, create game, list games, play game, observe game, logout, quit");
             case "create game" -> createGame();
             case "list games" -> listGames();
             case "play game" -> playGame();
+            case "observe game" -> observeGame();
             case "logout" -> logout();
             default -> System.out.println("Unknown command. Type help.");
         }
@@ -229,5 +230,15 @@ public class ClientMain {
         } catch (ServerFacade.FacadeException e) {
             System.out.println("Could not join game: " + e.getMessage());
         }
+    }
+
+    private void observeGame() {
+        var game = selectGame();
+        if (game == null) {
+            return;
+        }
+
+        System.out.println("Observing " + game.gameName() + ".");
+        BoardRenderer.render(new ChessGame(), false);
     }
 }
