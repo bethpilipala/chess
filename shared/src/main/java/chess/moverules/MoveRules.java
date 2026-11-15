@@ -1,4 +1,4 @@
-package chess.MoveRules;
+package chess.moverules;
 
 import chess.*;
 
@@ -47,8 +47,9 @@ public abstract class MoveRules {
                 moves.add(new ChessMove(start, end, null));
             }
             else { //If it IS occupied
-                if(isEnemy(board, start, end))
+                if(isEnemy(board, start, end)) {
                     moves.add(new ChessMove(start, end, null));
+                }
                 break; //Can't move any further past a piece
             }
 

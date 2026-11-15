@@ -1,10 +1,9 @@
 package chess;
 
-import chess.MoveRules.*;
+import chess.moverules.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Represents a single chess piece

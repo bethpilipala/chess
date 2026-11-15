@@ -198,13 +198,9 @@ public class ChessGame {
                 ChessPosition position = new ChessPosition(row, col);
                 ChessPiece piece = board.getPiece(position);
 
-                if (piece != null && piece.getTeamColor() != color)
-                {
-                    for (ChessMove move : piece.pieceMoves(board, position)) {
-                        if (move.getEndPosition().equals(kingPos))
-                            return true;
-                    }
-
+                if (piece != null && piece.getTeamColor() != color
+                        && pieceCanAttackKing(board, position, piece, kingPos)) {
+                    return true;
                 }
             }
         }
@@ -225,6 +221,16 @@ public class ChessGame {
                         return true;
                     }
                 }
+            }
+        }
+        return false;
+    }
+
+    private boolean pieceCanAttackKing(
+            ChessBoard board, ChessPosition position, ChessPiece piece, ChessPosition kingPos) {
+        for (ChessMove move : piece.pieceMoves(board, position)) {
+            if (move.getEndPosition().equals(kingPos)) {
+                return true;
             }
         }
         return false;

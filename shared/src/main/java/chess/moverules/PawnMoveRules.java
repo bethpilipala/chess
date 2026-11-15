@@ -1,4 +1,4 @@
-package chess.MoveRules;
+package chess.moverules;
 
 import chess.*;
 

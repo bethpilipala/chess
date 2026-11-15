@@ -44,41 +44,7 @@ public class Server {
 
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
 
-        //EXCEPTIONS
-        //400: bad request input
-        javalin.exception(BadRequestException.class, (e, ctx) -> {
-            ctx.status(400);
-            ctx.contentType("application/json");
-            ctx.result(gson.toJson(Map.of("message", e.getMessage())));
-        });
-        //401: invalid/missing auth token
-        javalin.exception(UnauthorizedException.class, (e, ctx) -> {
-            ctx.status(401);
-            ctx.contentType("application/json");
-            ctx.result(gson.toJson(Map.of("message", e.getMessage())));
-        });
-        //403- username already taken, color already taken, etc.
-        javalin.exception(AlreadyTakenException.class, (e, ctx) -> {
-            ctx.status(403);
-            ctx.contentType("application/json");
-            ctx.result(gson.toJson(Map.of("message", e.getMessage())));
-        });
-        //500: data/storage failures
-        javalin.exception(DataAccessException.class, (e, ctx) -> {
-            String message = e.getMessage();
-            if (message == null || !message.toLowerCase().contains("error")) {
-                message = "Error: " + message;
-            }
-            ctx.status(500);
-            ctx.contentType("application/json");
-            ctx.result(gson.toJson(Map.of("message", message)));
-        });
-        //500 other
-        javalin.exception(Exception.class, (e, ctx) -> {
-            ctx.status(500);
-            ctx.contentType("application/json");
-            ctx.result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
-        });
+        configureExceptionHandlers();
 
         //ENDPOINTS
         //DELETE /db
@@ -143,6 +109,44 @@ public class Server {
             ctx.status(200);
             ctx.contentType("application/json");
             ctx.result(gson.toJson(Map.of()));
+        });
+    }
+
+    private void configureExceptionHandlers() {
+        //EXCEPTIONS
+        //400: bad request input
+        javalin.exception(BadRequestException.class, (e, ctx) -> {
+            ctx.status(400);
+            ctx.contentType("application/json");
+            ctx.result(gson.toJson(Map.of("message", e.getMessage())));
+        });
+        //401: invalid/missing auth token
+        javalin.exception(UnauthorizedException.class, (e, ctx) -> {
+            ctx.status(401);
+            ctx.contentType("application/json");
+            ctx.result(gson.toJson(Map.of("message", e.getMessage())));
+        });
+        //403- username already taken, color already taken, etc.
+        javalin.exception(AlreadyTakenException.class, (e, ctx) -> {
+            ctx.status(403);
+            ctx.contentType("application/json");
+            ctx.result(gson.toJson(Map.of("message", e.getMessage())));
+        });
+        //500: data/storage failures
+        javalin.exception(DataAccessException.class, (e, ctx) -> {
+            String message = e.getMessage();
+            if (message == null || !message.toLowerCase().contains("error")) {
+                message = "Error: " + message;
+            }
+            ctx.status(500);
+            ctx.contentType("application/json");
+            ctx.result(gson.toJson(Map.of("message", message)));
+        });
+        //500 other
+        javalin.exception(Exception.class, (e, ctx) -> {
+            ctx.status(500);
+            ctx.contentType("application/json");
+            ctx.result(gson.toJson(Map.of("message", "Error: " + e.getMessage())));
         });
     }
 

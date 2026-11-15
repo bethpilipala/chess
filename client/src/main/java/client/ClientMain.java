@@ -148,20 +148,24 @@ public class ClientMain {
                 return;
             }
 
-            for (int i = 0; i < games.size(); i++) {
-                var game = games.get(i);
-                String white = game.whiteUsername() == null
-                        ? "open"
-                        : game.whiteUsername();
-                String black = game.blackUsername() == null
-                        ? "open"
-                        : game.blackUsername();
-
-                System.out.printf("%d. %s — White: %s, Black: %s%n",
-                        i + 1, game.gameName(), white, black);
-            }
+            printGames();
         } catch (ServerFacade.FacadeException e) {
             System.out.println("Could not list games: " + e.getMessage());
+        }
+    }
+
+    private void printGames() {
+        for (int i = 0; i < games.size(); i++) {
+            var game = games.get(i);
+            String white = game.whiteUsername() == null
+                    ? "open"
+                    : game.whiteUsername();
+            String black = game.blackUsername() == null
+                    ? "open"
+                    : game.blackUsername();
+
+            System.out.printf("%d. %s — White: %s, Black: %s%n",
+                    i + 1, game.gameName(), white, black);
         }
     }
 
@@ -178,14 +182,7 @@ public class ClientMain {
             return null;
         }
 
-        for (int i = 0; i < games.size(); i++) {
-            var game = games.get(i);
-            String white = game.whiteUsername() == null ? "open" : game.whiteUsername();
-            String black = game.blackUsername() == null ? "open" : game.blackUsername();
-
-            System.out.printf("%d. %s — White: %s, Black: %s%n",
-                    i + 1, game.gameName(), white, black);
-        }
+        printGames();
 
         String input = readLine("Game number (blank to cancel): ");
         if (input == null || input.isBlank()) {
